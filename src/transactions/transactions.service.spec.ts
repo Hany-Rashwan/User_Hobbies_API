@@ -1,17 +1,17 @@
 /* eslint-disable prettier/prettier */
 import { Test, TestingModule } from "@nestjs/testing";
-import { HobbyService } from "./hobbies.service";
-import { HobbyRepository } from "./hobby.repository";
+import { TransactionService } from "./transactions.service";
+import { TransactionRepository } from "./transactions.repository";
 
 describe("UserService", () => {
-  let service: HobbyService;
+  let service: TransactionService;
   //let repository: Repository<User>;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [HobbyRepository,HobbyService],
+      providers: [TransactionRepository,TransactionService],
     }).compile();
-    service = module.get<HobbyService>(HobbyService);
+    service = module.get<TransactionService>(TransactionService);
   });
   it("should be defined", () => {
     expect(service).toBeDefined();

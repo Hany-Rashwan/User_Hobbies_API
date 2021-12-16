@@ -1,13 +1,17 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { typeOrmConfig } from "./config/typeorm.config";
-import { HobbiesModule } from "./hobbies/hobbies.module";
-import { UserModule } from "./users/user.module";
-import { UserController } from "./users/user.controller";
+import { TypeOrmConfigService } from "./config/typeorm.config";
+import { TransactionsModule } from "./transactions/transactions.module";
+import { ConfigModule } from "@nestjs/config";
 
 //Application Root module
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), HobbiesModule, UserModule],
-  controllers: [UserController],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
+    TransactionsModule,
+  ],
 })
 export class AppModule {}

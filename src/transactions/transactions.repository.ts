@@ -1,38 +1,34 @@
 import { NotFoundException } from "@nestjs/common";
 //import { User } from '../users/user.entity';
 import { EntityRepository, Repository } from "typeorm";
-import { CreateHobbyDto } from "./Dto/create-hobby-dto";
+import { CreateHobbyDto } from "./Dto/create-transaction-dto";
 //import { GetHobbiesFilterDto} from './Dto/get-hobby-filter.dto';
-import { Hobby } from "./hobby.entity";
+import { Transaction } from "./transactions.entity";
 
-@EntityRepository(Hobby)
-export class HobbyRepository extends Repository<Hobby> {
+@EntityRepository(Transaction)
+export class TransactionRepository extends Repository<Transaction> {
   //====================Create=Hobby===============================
-  async createHobby(createHobbyDto: CreateHobbyDto): Promise<Hobby> {
-    const { userId, name, year, passionLevel } = createHobbyDto;
-    const hobby = new Hobby();
-    hobby.passionLevel = passionLevel;
+  async creatTransaction(createHobbyDto: CreateHobbyDto): Promise<Transaction> {
+    const { name, year } = createHobbyDto;
+    const hobby = new Transaction();
     hobby.name = name;
     hobby.year = year;
-    hobby.userId = userId;
     await hobby.save();
     return hobby;
   }
   //===================Update=Hobby===============================
-  async updateHobby(
+  async updateTransaction(
     hobbyId: string,
     createHobbyDto: CreateHobbyDto,
   ): Promise<void> {
-    const { passionLevel, name, year, userId } = createHobbyDto;
-    const hobby = await this.getHobbyById(hobbyId);
-    hobby.passionLevel = passionLevel;
+    const { name, year } = createHobbyDto;
+    const hobby = await this.getTransactionById(hobbyId);
     hobby.name = name;
     hobby.year = year;
-    hobby.userId = userId;
     await hobby.save();
   }
   //==================Delete=Hobby==================================
-  async deleteHobby(hobbyId: string): Promise<void> {
+  async deleteTransaction(hobbyId: string): Promise<void> {
     const Result = await this.delete(hobbyId);
 
     if (Result.affected === 0) {
@@ -40,7 +36,7 @@ export class HobbyRepository extends Repository<Hobby> {
     }
   }
   //====================GET=Hobby=By=ID=============================
-  async getHobbyById(hobbyId: string): Promise<Hobby> {
+  async getTransactionById(hobbyId: string): Promise<Transaction> {
     try {
       const Found = await this.findOne(hobbyId);
 
@@ -54,12 +50,12 @@ export class HobbyRepository extends Repository<Hobby> {
     }
   }
   //====================GET All Hobbies =============================
-  async getHobbies(): Promise<Hobby[]> {
+  async getTransactions(): Promise<Transaction[]> {
     try {
       const Found = await this.find();
 
       if (!Found) {
-        throw new NotFoundException(`No Hobbies Found`);
+        throw new NotFoundException(`No Transactions Found`);
       }
 
       return Found;
@@ -68,18 +64,18 @@ export class HobbyRepository extends Repository<Hobby> {
     }
   }
   //====================GET All Hobbies =============================
-  async getHobbiesbyUserId(id: string): Promise<Hobby[]> {
-    try {
-      console.log(id);
-      const Found = await this.find({ userId: id });
+  // async getHobbiesbyUserId(id: string): Promise<Hobby[]> {
+  //   try {
+  //     console.log(id);
+  //     const Found = await this.find(hobbyId);
 
-      if (!Found) {
-        throw new NotFoundException(`No Hobbies Found`);
-      }
+  //     if (!Found) {
+  //       throw new NotFoundException(`No Hobbies Found`);
+  //     }
 
-      return Found;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     return Found;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 }
